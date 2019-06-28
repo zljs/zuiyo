@@ -7,7 +7,7 @@
       @click-left="onClickLeft"
       @click-right="onClickRight"
     />
-      <field-group class="login" :fieldBtnHandler="login" btnText="登  录"></field-group>
+      <field-group class="login" type="login"></field-group>
 
   </div>
 </template>
@@ -21,12 +21,6 @@ export default {
     components: {
     "field-group": fieldGroup
   },
-  data() {
-    return {
-      username: "",
-      password: ""
-    };
-  },
   methods: {
     onClickLeft() {
       this.$router.back();
@@ -34,23 +28,13 @@ export default {
     onClickRight() {
       this.$router.push({ name: "register" });
     },
-    async login() {
-      await axios.post("/zuiyo/register", {
-        username: this.username,
-        password: this.password
-      });
-    }
+
   }
 };
 </script>
 <style lang="scss">
 .login {
-  width: 80%;
   margin: 40vw auto 0;
-  .van-field__label {
-    width: 10vw !important;
-  }
-
 }
 
 </style>

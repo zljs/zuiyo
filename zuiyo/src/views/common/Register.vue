@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-nav-bar title="注册" left-text left-arrow @click-left="onClickLeft"/>
-    <field-group  class="register" :fieldBtnHandler="register" btnText="注  册"></field-group>
+    <field-group  class="register" type="register"></field-group>
   </div>
 </template>
 <script>
@@ -15,9 +15,7 @@ export default {
     onClickLeft() {
       this.$router.back();
     },
-    async register() {
-      console.log(1);
-    }
+    
   }
 };
 </script>

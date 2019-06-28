@@ -2,20 +2,20 @@ const router = require('koa-router')({
   prefix: '/zuiyo' // 标示前需要“/”
 })
 const core = require('koa2-cors')
-const HomeController = require('./controller/home')
+const CommonController = require('./controller/common')
+const UserController = require('./controller/userinfo')
+
 module.exports = (app) => {
-  router.get('/', HomeController.index)
+  router.post('/checkUpdate', CommonController.checkUpdate)
 
-  router.get('/home', HomeController.home)
+  router.post('/getSmsCode', UserController.getSmsCode)
+  router.post('/register', UserController.register)
+  router.post('/login', UserController.login)
+  router.post('/logout', UserController.logout)
+  
+  router.post('/getUserInfo', UserController.getUserInfo)
 
-  router.get('/home/:id/:name', HomeController.homeParams)
-
-  router.get('/user', HomeController.login)
-
-  router.post('/register', HomeController.register)
-
-  router.post('/testpost', HomeController.testpost)
-  router.post('/checkUpdate', HomeController.checkUpdate)
+  
   app.use(core())
   app.use(router.routes()).use(router.allowedMethods())
 }

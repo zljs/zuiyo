@@ -30,10 +30,7 @@ const errorHandle = (status, data, config) => {
       removeStore('jwt')
       tip('请重新登录！', () => {
         router.push({
-          name: 'Login',
-          query: {
-            selfState: 40001
-          }
+          name: 'login',
         })
       })
     },
@@ -60,7 +57,7 @@ instance.interceptors.request.use(
   async config => {
     // 配置token校验
     const token = await getToken()
-    token && (config.headers.jwt = token)
+    token && (config.headers.Authorization = 'Bearer '+token)
     // 防重复提交
     const keyString = qs.stringify(
       Object.assign({}, { url: config.url, method: config.method }, config.data)
@@ -75,7 +72,6 @@ instance.interceptors.request.use(
     requestMap.set(keyString, true)
 
     Object.assign(config, { _keyString: keyString })
-    // config.url = 
     return {
       ...config,
       data: {

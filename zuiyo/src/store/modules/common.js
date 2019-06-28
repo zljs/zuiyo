@@ -17,7 +17,6 @@ const tip = (msg, fn = null) => {
     message: msg,
     duration: 2000,
     position: 'bottom',
-    forbidClick: true,
     onClose () {
       fn && fn()
       console.log('tip关闭了')

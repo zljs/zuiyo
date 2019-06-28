@@ -3,21 +3,30 @@
     <van-field
       v-model="phone"
       type="tel"
-      v-focus="true"
+      maxlength="11"
       clearable
       label="+86"
       left-icon
       placeholder="请输入手机号"
     />
-    <van-field v-model="password" type="password" placeholder="请输入验证码">
-      <button slot="button" @click="getCode">
+    <van-field v-if="type==='login'" v-model="password" maxlength="18" placeholder="请输入密码" />
+    <van-field v-else v-model="authcode" type="number" maxlength="6" placeholder="请输入验证码">
+      <button slot="button">
         <count-down v-if="counting" class="grey" :time="6000" @end="handleCountdownEnd">
           <template slot-scope="props">重新发送({{ props.totalSeconds }})</template>
         </count-down>
-        <span v-else class="field_btn" :class="{grey:grey}">获取验证码</span>
+        <span v-else class="field_btn" :class="{ grey: grey }" @click="getCode">获取验证码</span>
       </button>
     </van-field>
-    <van-button size="large" type="info" class="vanbtn" round @click="fieldBtnHandler">{{btnText}}</van-button>
+    <van-button
+      size="large"
+      type="info"
+      class="vanbtn"
+      :class="{greybtn:disabled}"
+      round
+      :disabled="disabled"
+      @click="typeHandler.fieldBtnHandler"
+    >{{typeHandler.btnText}}</van-button>
   </van-cell-group>
 </template>
 
@@ -25,15 +34,13 @@
 import { mapActions } from "vuex";
 import Coi from "@/config/utils/Coi.js";
 import countDown from "@/components/funComponents/countDown.js";
+import { getSmsCode, register, login } from "@/services/commonHttp.js";
+import { trim } from '@/config/utils/common_utils.js'
 export default {
   props: {
-    fieldBtnHandler: {
-      type: Function,
-      require: true
-    },
-    btnText: {
+    type: {
       type: String,
-      default: "注册"
+      require: true
     }
   },
   components: {
@@ -41,10 +48,13 @@ export default {
   },
   data() {
     return {
-      phone: "",
+      phone: 17625805203,
       password: "",
+      authcode: "",
+      phonePass: false,
       grey: true,
-      counting: false
+      counting: false,
+      disabled: true
     };
   },
   watch: {
@@ -53,6 +63,52 @@ export default {
         this.grey = newval ? false : true;
       },
       immediate: true
+    },
+    isPhone: {
+      handler: function(newval, oldval) {
+        let { pass } = newval;
+        this.phonePass = pass;
+      },
+      immediate: true
+    },
+    btnDisabled: {
+      handler: function(newval, oldval) {
+       this.disabled = newval;
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    typeHandler() {
+      let btnText = "",
+        fieldBtnHandler = null;
+      if (this.type === "login") {
+        btnText = "登  录";
+        fieldBtnHandler = this.login();
+      } else if (this.type === "register") {
+        btnText = "注  册";
+        fieldBtnHandler = this.register();
+      }
+      return { btnText, fieldBtnHandler };
+    },
+    isPhone() {
+      let coiValidate = new Coi();
+      coiValidate
+        .data(this.phone)
+        .isRequired("手机号码不能为空")
+        .maxLength("11")
+        .isMobile("手机格式错误");
+      let errormsg = coiValidate.errorMessage;
+      let pass = coiValidate.pass;
+
+      return { pass, errormsg };
+    },
+    btnDisabled(){
+      if ( this.phonePass && (trim(this.authcode).length >= 4 || trim(this.password).length>0) ) {
+          
+        return false
+        }
+        return true
     }
   },
   methods: {
@@ -62,34 +118,73 @@ export default {
       this.counting = false;
     },
     async getCode() {
-      let coiValidate = new Coi();
-      coiValidate
-        .data(this.phone)
-        .isRequired("手机号码不能为空")
-        .maxLength("11")
-        .isMobile("手机格式错误");
-      let errormsg = coiValidate.errorMessage;
-      let pass = coiValidate.pass;
+      let { pass, errormsg } = this.isPhone;
       if (pass) {
         this.counting = true;
+        const res = await getSmsCode({ phone: this.phone });
+        if (!res) {
+          this.handleCountdownEnd();
+        }
       } else {
         this.setTip({ msg: errormsg });
       }
+    },
+    login() {
+      return async () => {
+        console.log("login");
+        let param = {
+          phone: this.phone,
+          password: this.password
+        }
+        const isOk = await login(param)
+        if(isOk){
+          this.setTip({ 
+            msg: '登录成功',
+            fn:()=>{
+              this.$router.back()
+            } 
+          });
+        }
+      };
+    },
+    register() {
+      return async () => {
+        console.log("register");
+        let param = {
+          phone: this.phone,
+          authcode: this.authcode
+        }
+        const isOk = await register(param)
+        if(isOk){
+          this.setTip({ 
+            msg: '注册成功',
+            fn:()=>{
+              this.$router.back()
+            } 
+          });
+        }
+      };
     }
   }
 };
 </script>
 
 <style lang="scss">
-.vanbtn{
-    margin-top: 20px;
+.vanbtn {
+  margin-top: 20px;
 }
 
+.login,
 .register {
   width: 80%;
   margin: 0 auto;
   .van-field__label {
     width: 10vw !important;
   }
+}
+
+.greybtn {
+  background-color: #8e8e8e !important;
+  border: 1px solid #8e8e8e !important;
 }
 </style>

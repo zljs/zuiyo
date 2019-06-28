@@ -26,12 +26,12 @@ module.exports = {
   },
   outputDir: 'docs',
   publicPath: process.env.NODE_ENV === 'production' ? '/vant-demo/' : '/',
-  chainWebpack: (config) => {
-    config.resolve.alias
-        .set('@', resolve('src'))
-        // .set('assets', resolve('src/assets'))
-        // .set('components', resolve('src/components'))
-},
+  // chainWebpack: (config) => {
+  //   config.resolve.alias
+  //     .set('@', resolve('src'))
+  //   // .set('assets', resolve('src/assets'))
+  //   // .set('components', resolve('src/components'))
+  // },
 
   css: {
     loaderOptions: {

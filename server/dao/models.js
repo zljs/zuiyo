@@ -1,24 +1,19 @@
 module.exports = {
-    version:{
-        version:{
-            type:String,
-            required:true
+    version: {
+        version: {
+            type: String,
+            required: true
         }
     },
     user: {
-        name:{
-            type:String,
-            required:true
-        },
-        password: {
-            type:String,
-            required: true
-        },
-        nickname: String,
-        uuid:String,
-        avatar: String,
-        roles: Array,
-        createTime: { type: Date, default: Date.now},
+        phone: { type: String, required: true },
+        name: { type: String, default: this.phone },
+        password: { type: String, required: true },
+        uuid: { type: String, default: '' },
+        avatar: { type: String, default: '' },
+        roles: { type: Array, default: [] },
+        createTime: { type: Date, default: Date.now },
+        token: { type: String, default: '' },
         loginTime: Date
     },
 

@@ -84,7 +84,7 @@ export default {
     if (res && res.success.needUpdate) {
       this.tabBar = res.success.tabBarList;
     }
-  } 
+  }
 };
 </script>
 

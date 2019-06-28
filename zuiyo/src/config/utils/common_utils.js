@@ -136,3 +136,29 @@ export function commonLink(url) {
   window.location.href = url
 }
 
+/**
+ * 删除左右两端的空格
+ * @param str
+ * @returns {string | * | void}
+ */
+export function trim(str) {
+  return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+
+/**
+* 删除左边的空格
+* @param str
+* @returns {string | * | void}
+*/
+export function ltrim(str) {
+  return str.replace(/(^\s*)/g, "");
+}
+
+/**
+* 删除右边的空格
+* @param str
+* @returns {string | * | void}
+*/
+export function rtrim(str) {
+  return str.replace(/(\s*$)/g, "");
+}

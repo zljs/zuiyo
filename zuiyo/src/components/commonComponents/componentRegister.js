@@ -29,5 +29,6 @@ requireComponent.keys().forEach(filePath => {
     ? capitalizeFirstLetter(componentConfig.default.name)
     : fileName
 
+    console.log('%ccomponentName: ','color: MidnightBlue; background: Aquamarine; font-size: 20px;',componentName);
   Vue.component(componentName, componentConfig.default || componentConfig)
 })
