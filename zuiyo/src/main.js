@@ -18,6 +18,27 @@ Vue.directive('focus', {
     elin.focus()
   }
 })
+Vue.directive('auth', function (el, binding) {
+  let loggedIn = store.getters.auth.loggedIn
+  if (binding.modifiers.loggedIn) {
+    // 登录时显示
+    if (loggedIn) {
+      el.style.display = 'block'
+    } else {
+      el.style.display = 'none'
+    }
+  }
+  if (binding.modifiers.loggedOut) {
+
+    // 未登录时显示
+    if (loggedIn) {
+      el.style.display = 'none'
+    } else {
+      el.style.display = 'block'
+    }
+  }
+})
+
 new Vue({
   router,
   store,
