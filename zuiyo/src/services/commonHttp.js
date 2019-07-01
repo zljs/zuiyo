@@ -24,7 +24,7 @@ const register = async (data) => {
   const res = await httpPost(apis.conmonApis.register, data)
   if (res) {
     if (res.status === 0) {
-      return res.success.isOk
+      return res.success
     }
     tip(`${res.errormsg}`)
     return false

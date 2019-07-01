@@ -1,6 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { getStore, setStore } from './storage'
-import getParam from './getParam'
+import { getStore } from './storage'
 
 export const getToken = (errorCb = null) => {
   let jwt = getStore('zToken')

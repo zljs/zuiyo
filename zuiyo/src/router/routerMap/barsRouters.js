@@ -1,4 +1,6 @@
 import Home from '@/views/bars/Home'
+import auth from '../middleware/auth'
+
 let barsRouters = [
   {
     path: '/home',
@@ -13,7 +15,8 @@ let barsRouters = [
     name: 'dynamic',
     component: () => import(/* webpackChunkName: "about" */ '@/views/bars/Dynamic'),
     meta:{
-      showBar: true
+      showBar: true,
+      middleware:[auth]
     }
   },
   {
@@ -30,7 +33,17 @@ let barsRouters = [
     component: () => import(/* webpackChunkName: "about" */ '@/views/bars/MyCenter'),
     meta:{
       showBar: true
-    }
+    },
+    children:[
+      {
+        path: 'setting',
+        name: 'setting',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/bars/MyCenter/Setting'),
+        meta:{
+          child: true
+        }
+      },
+    ]
   }
 ]
 

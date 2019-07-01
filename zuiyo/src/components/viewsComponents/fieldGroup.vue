@@ -9,7 +9,7 @@
       left-icon
       placeholder="请输入手机号"
     />
-    <van-field v-if="type==='login'" v-model="password" maxlength="18" placeholder="请输入密码" />
+    <van-field v-if="type==='login'" type="password" v-model="password" maxlength="18" placeholder="请输入密码" />
     <van-field v-else v-model="authcode" type="number" maxlength="6" placeholder="请输入验证码">
       <button slot="button">
         <count-down v-if="counting" class="grey" :time="6000" @end="handleCountdownEnd">
@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setTip"]),
+    ...mapActions(["setTip","setLoggedIn","setAccount"]),
 
     handleCountdownEnd() {
       this.counting = false;
@@ -138,6 +138,8 @@ export default {
         }
         const isOk = await login(param)
         if(isOk){
+          this.setLoggedIn(true)
+          this.setAccount({phone:this.phone,password:this.password})
           this.setTip({ 
             msg: '登录成功',
             fn:()=>{
@@ -154,8 +156,9 @@ export default {
           phone: this.phone,
           authcode: this.authcode
         }
-        const isOk = await register(param)
-        if(isOk){
+        const res = await register(param)
+        if(res.isOk){
+          this.setAccount({phone:res.phone,password:res.password})
           this.setTip({ 
             msg: '注册成功',
             fn:()=>{

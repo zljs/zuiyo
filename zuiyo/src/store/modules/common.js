@@ -1,4 +1,4 @@
-import * as types from '../types'
+import * as types from '../mutation-types'
 import { Toast } from 'vant'
 let ajaxloading = null
 const loading = () => {
@@ -28,7 +28,8 @@ const state = {
   [types.setCancelTokenTarget]: false,
   [types.setAxiosLoading]: loading,
   [types.setTip]: tip,
-  [types.updateTabBar]: false
+  [types.updateTabBar]: false,
+  [types.setTransitionName]: ''
 }
 // actions
 const actions = {
@@ -47,7 +48,11 @@ const actions = {
   // 设置tabBar更新开关
   [types.updateTabBar] ({ commit }, target) {
     commit(types.updateTabBar, target)
-  }
+  },
+  // 设置前进后退动画name
+  [types.setTransitionName] ({ commit }, target) {
+    commit(types.setTransitionName, target)
+  },
 }
 // mutations
 const mutations = {
@@ -66,6 +71,25 @@ const mutations = {
   [types.setTip] (state, target) {
     let { msg, fn } = target
     state[types.setTip](msg, fn)
+  },
+  [types.setTransitionName] (state, {to, from}) {
+    let routeDeep = ["login", "register", "privates"];
+    if(to.meta.child){
+      routeDeep = [to.name]
+    }
+    if(from.meta.child){
+      routeDeep = [from.name]
+    }
+      const toDepth = routeDeep.indexOf(to.name);
+      const fromDepth = routeDeep.indexOf(from.name);
+      let transitionName =
+        toDepth > fromDepth
+          ? "fold-left"
+          : toDepth == fromDepth
+          ? ""
+          : "fold-right";
+          console.log('%ctransitionName: ','color: MidnightBlue; background: Aquamarine; font-size: 20px;',transitionName);
+    state[types.setTransitionName] = transitionName
   }
 }
 // getters
@@ -75,6 +99,9 @@ const getters = {
   },
   getCancelTokenTarget (state) {
     return state[types.setCancelTokenTarget]
+  },
+  getTransitionName( state ){
+    return state[types.setTransitionName]
   }
 }
 

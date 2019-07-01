@@ -1,11 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store/index.js'
+import middlewarePipeline from './middleware/middlewarePipeline'
 Vue.use(VueRouter)
+
+
+
 let routes = []
 /**
  * 自动扫描子模块路由并导入
  */
-const routerContext = require.context('./', true, /\.js$/)
+const routerContext = require.context('./routerMap', true, /\.js$/)
 routerContext.keys().forEach(route => {
   // 1如果是根目录的index.js、不处理
   if (route.startsWith('./index')) {
@@ -21,7 +26,7 @@ let router = new VueRouter({
     ...routes,
     {
       path: '*',
-      redirect:'/home'
+      redirect: '/home'
     }
   ]
 })
@@ -31,7 +36,23 @@ router.beforeEach((to, from, next) => {
     document.title = to.meta.title
   }
   
-  next()
+  if (!to.meta.middleware) {
+    return next()
+  }
+  const middleware = to.meta.middleware
+
+  const context = {
+    to,
+    from,
+    next,
+    store
+  }
+  return middleware[0]({
+    ...context,
+    next: middlewarePipeline(context, middleware, 1)
+  })
+
+  // next()
 })
 
 // router.onError((error) => {

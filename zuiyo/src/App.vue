@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition :name="transitionName">
+    <transition :name="getTransitionName">
       <router-view :key="$router.name" class="absolute"/>
     </transition>
     <van-tabbar v-if="$route.meta.showBar" v-model="active" route>
@@ -19,6 +19,7 @@
 </template>
 <script>
 import { checkUpdate } from "@/services/commonHttp.js";
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -67,23 +68,22 @@ export default {
   watch: {
     $route(to, from) {
       this.active = to.name;
-      const routeDeep = ["/login", "/register"];
-      const toDepth = routeDeep.indexOf(to.path);
-      const fromDepth = routeDeep.indexOf(from.path);
-      this.transitionName =
-        toDepth > fromDepth
-          ? "fold-left"
-          : toDepth == fromDepth
-          ? ""
-          : "fold-right";
+      
+      this.setTransitionName({to, from})
     }
   },
-
+  computed:{
+    ...mapGetters(['getTransitionName'])
+  },
   async created() {
+
     const res = await checkUpdate({ version: "ver_0626" });
     if (res && res.success.needUpdate) {
       this.tabBar = res.success.tabBarList;
     }
+  },
+  methods:{
+    ...mapActions(['setTransitionName'])
   }
 };
 </script>
@@ -100,6 +100,7 @@ export default {
 .absolute {
   position: absolute;
   width: 100%;
+  height: 100%;
 }
 .van-hairline--bottom::after {
   border-bottom-width: 0 !important;
@@ -113,6 +114,13 @@ export default {
 
 .field_btn {
   color: #1989fa;
+  border: none;
+}
+.van-field__button{
+  button{
+    border-color: transparent;
+    background-color: transparent;
+  }
 }
 .grey {
   color: #8e8e8e;

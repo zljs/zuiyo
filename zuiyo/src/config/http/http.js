@@ -6,6 +6,7 @@ import config from './config' // 导入默认配置
 import { getToken } from '../utils/token'
 import { removeStore } from '../utils/storage'
 import { tip } from '@/config/utils/storeUtils.js'
+import store from '../../store';
 const CancelToken = axios.CancelToken
 Toast.allowMultiple()
 const requestMap = new Map()
@@ -27,11 +28,12 @@ const errorHandle = (status, data, config) => {
   // 状态码判断
   const errorHandleMap = {
     401: () => {
-      removeStore('jwt')
+      removeStore('zToken')
+      store.dispatch('setLoggedIn', false)
       tip('请重新登录！', () => {
-        router.push({
-          name: 'login',
-        })
+        // router.push({
+        //   name: 'login',
+        // })
       })
     },
     404: () => {
@@ -41,10 +43,21 @@ const errorHandle = (status, data, config) => {
       tip('请求超时！')
     },
     '5xx': () => {
-      tip('服务器错误')
+      tip('小右系统维护中～')
+      
     }
   }
-  return errorHandleMap[statusHandle(status)]()
+  return errorHandleMap[statusHandle(status)]() &&  requestMap.set(config._keyString, false)
+}
+// 网络错误/请求无返回值
+const noResponseError = (error) => {
+  let { message, config } = error
+  if(message.includes('Network Error') || message.includes('timeout')){
+    tip('您的网络出现了一些小问题～')
+    requestMap.set(config._keyString, false)
+    return false
+  }
+  return
 }
 
 // 在main.js设置全局的请求次数，请求的间隙
@@ -100,10 +113,7 @@ instance.interceptors.response.use(
     return JSON.parse(JSON.stringify(data))
   },
   error => {
-    if (error.message.includes('timeout')) {
-      tip('请求超时！')
-      return false
-    }
+    noResponseError(error)
     const { response } = error
     if (response) {
       const config = response.config
