@@ -30,11 +30,11 @@ const errorHandle = (status, data, config) => {
     401: () => {
       removeStore('zToken')
       store.dispatch('setLoggedIn', false)
-      tip('请重新登录！', () => {
+      // tip('最右：请先登录！', () => {
         // router.push({
         //   name: 'login',
         // })
-      })
+      // })
     },
     404: () => {
       tip('服务器错误')

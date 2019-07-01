@@ -58,7 +58,7 @@ const logout = async (data=null) => {
   const res = await httpPost(apis.conmonApis.logout, data)
   if (res) {
     if (res.status === 0) {
-      return res.success.isOk
+      return res.success.exited
     }
     tip(`${res.errormsg}`)
     return false

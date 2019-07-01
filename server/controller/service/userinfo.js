@@ -105,7 +105,7 @@ module.exports = () => {
         if (outDoc) {
           ctx.body.token = ''
           data = {
-            isOk: true,
+            exited: true,
           }
         } else {
           errmsg = RetCode.LogoutFail
