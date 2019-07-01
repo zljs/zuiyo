@@ -8,10 +8,17 @@
       </div>
     </van-nav-bar>
 
-    <van-swipe class="page_swipe" ref="page_swipe" @change="onChange" :loop="false" :show-indicators="false" :touchable="touchable">
+    <van-swipe
+      class="page_swipe"
+      ref="page_swipe"
+      @change="onChange"
+      :loop="false"
+      :show-indicators="false"
+      :touchable="touchable"
+    >
       <div class="banner"></div>
       <van-swipe-item>
-        <van-tabs v-model="homePageTabActive" swipeable animated>
+        <van-tabs v-model="homePageTabActive" @change="tabChange" swipeable animated>
           <van-tab title="帖子" name="invitation">
             <div class="invitation">帖子</div>
           </van-tab>
@@ -24,9 +31,7 @@
         </van-tabs>
       </van-swipe-item>
       <van-swipe-item>
-        <div class="square">
-          此刻
-        </div>
+        <div class="square">此刻</div>
       </van-swipe-item>
     </van-swipe>
   </div>
@@ -38,24 +43,23 @@ import HomePage from "./HomePage";
 export default {
   data() {
     return {
-      touchable: false,
-      pageActive: "square",
+      touchable: true,
       homePageTabActive: 0,
       pageInd: 0
     };
   },
-  watch: {
-    homePageTabActive: {
-      handler: function(newval, oldval) {
-        this.touchable = false;
-        if (newval === 2) {
-          this.touchable = true;
-        }
-      },
-      immediate: true,
-      // deep: true
-    }
-  },
+  // watch: {
+    // homePageTabActive: {
+    //   handler: function(newval, oldval) {
+    //     this.touchable = false;
+    //     if (newval === 2) {
+    //       this.touchable = true;
+    //     }
+    //   },
+    //   immediate: true,
+    //   // deep: true
+    // }
+  // },
   methods: {
     onClickLeft() {
       this.$router.back();
@@ -64,7 +68,14 @@ export default {
       this.pageInd = index;
     },
     swipeTo(index) {
-      this.$refs.page_swipe.swipeTo(index)
+      this.$refs.page_swipe.swipeTo(index);
+    },
+    tabChange(index, title) {
+      this.touchable = false;
+      if (index === 2) {
+        this.touchable = true;
+      }
+    
     }
   }
 };
@@ -79,18 +90,15 @@ export default {
 .banner {
   height: 200px;
 }
-.page_swipe{
+.page_swipe {
   flex-grow: 1;
-  &>.van-swipe__track{
-
-  }
 }
 .invitation,
 .remark,
 .topic {
   height: 300px;
 }
-.square{
+.square {
   height: 100%;
 }
 .line {
@@ -98,6 +106,7 @@ export default {
 }
 .page-title {
   color: #7e7e7e;
+  transition: 0.3s;
 }
 .page-select {
   color: #000;
