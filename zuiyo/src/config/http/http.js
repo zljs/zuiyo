@@ -31,9 +31,6 @@ const errorHandle = (status, data, config) => {
       removeStore('zToken')
       store.dispatch('setLoggedIn', false)
       // tip('最右：请先登录！', () => {
-        // router.push({
-        //   name: 'login',
-        // })
       // })
     },
     404: () => {

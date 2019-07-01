@@ -16,7 +16,6 @@ let barsRouters = [
     component: () => import(/* webpackChunkName: "about" */ '@/views/bars/Dynamic'),
     meta:{
       showBar: true,
-      middleware:[auth]
     }
   },
   {

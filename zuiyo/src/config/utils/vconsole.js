@@ -1,4 +1,7 @@
 import VConsole from 'vconsole';
+import { parseUA } from '@/config/utils/common_utils.js'
+
 (function () {
-    return new VConsole()
+    let ua = parseUA()
+    if(ua.weixin) new VConsole()
 })()

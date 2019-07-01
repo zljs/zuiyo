@@ -6,7 +6,7 @@
         个人中心
         <van-button size="large" type="info" to="/privates">进入空间</van-button>
         <van-button size="large" type="info" @click="goSetting">设置</van-button>
-        <van-button v-auth.loggedOut size="large" type="info" to="/login">登录</van-button>
+        <van-button v-if="!auth.loggedIn" size="large" type="info" to="/login">登录</van-button>
 
         <div style="margin-top:100px;">
           手机号：{{getAccount.phone}}
@@ -30,7 +30,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getAccount", "getTransitionName"])
+    ...mapGetters(['auth',"getAccount", "getTransitionName"])
   },
   created() {
     this.getUserInfo();
