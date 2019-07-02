@@ -1,7 +1,12 @@
 <template>
   <div id="app">
+    <transition :name="getTransitionName" mode="in-out">
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive" :key="$router.name" class="absolute"/>
+      </keep-alive>
+    </transition>
     <transition :name="getTransitionName">
-      <router-view :key="$router.name" class="absolute"/>
+        <router-view v-if="!$route.meta.keepAlive" :key="$router.name" class="absolute"/>
     </transition>
     <van-tabbar v-if="$route.meta.showBar" v-model="active" route>
       <template v-for="item in tabBar">
@@ -11,7 +16,7 @@
           :name="item.name"
           :to="item.path"
           :dot="item.dot"
-          :icon="active===item.name?item.icon_selected:item.icon_default"
+          :icon="item.path.search(active)>0?item.icon_selected:item.icon_default"
         >{{item.title}}</van-tabbar-item>
       </template>
     </van-tabbar>

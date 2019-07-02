@@ -6,15 +6,16 @@ let barsRouters = [
     path: '/home',
     name: 'home',
     component: Home,
-    meta:{
-      showBar: true
+    meta: {
+      showBar: true,
+      keepAlive: true
     }
   },
   {
     path: '/dynamic',
     name: 'dynamic',
     component: () => import(/* webpackChunkName: "about" */ '@/views/bars/Dynamic'),
-    meta:{
+    meta: {
       showBar: true,
     }
   },
@@ -22,7 +23,7 @@ let barsRouters = [
     path: '/news',
     name: 'news',
     component: () => import(/* webpackChunkName: "about" */ '@/views/bars/News'),
-    meta:{
+    meta: {
       showBar: true
     }
   },
@@ -30,15 +31,15 @@ let barsRouters = [
     path: '/mycenter',
     name: 'mycenter',
     component: () => import(/* webpackChunkName: "about" */ '@/views/bars/MyCenter'),
-    meta:{
+    meta: {
       showBar: true
     },
-    children:[
+    children: [
       {
         path: 'setting',
         name: 'setting',
         component: () => import(/* webpackChunkName: "about" */ '@/views/bars/MyCenter/Setting'),
-        meta:{
+        meta: {
           child: true
         }
       },

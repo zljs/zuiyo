@@ -1,6 +1,6 @@
 <template>
   <div>
-    <transition :name="getTransitionName">
+    <transition :name="getTransitionName" >
       <router-view :key="$router.name" class="absolute" />
       <div v-if="!$route.meta.child" class="absolute" >
         个人中心
