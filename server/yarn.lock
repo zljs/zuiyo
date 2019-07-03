@@ -616,11 +616,6 @@ mongoose@^5.6.0:
     sift "7.0.1"
     sliced "1.0.1"
 
-mongose@^0.0.2-security:
-  version "0.0.2-security"
-  resolved "https://registry.npm.taobao.org/mongose/download/mongose-0.0.2-security.tgz#34640fa153c935371993ad8c0cc1a96f35f8be9b"
-  integrity sha1-NGQPoVPJNTcZk62MDMGpbzX4vps=
-
 mpath@0.6.0:
   version "0.6.0"
   resolved "https://registry.npm.taobao.org/mpath/download/mpath-0.6.0.tgz#aa922029fca4f0f641f360e74c5c1b6a4c47078e"

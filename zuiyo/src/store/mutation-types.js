@@ -1,8 +1,0 @@
-export const setCancelTokenTarget = 'setCancelTokenTarget'
-export const setAxiosLoading = 'setAxiosLoading'
-export const setTip = 'setTip'
-export const updateTabBar = 'updateTabBar'
-export const setTransitionName = 'setTransitionName'
-export const setLoggedIn = 'setLoggedIn'
-export const setSubscribed = 'setSubscribed'
-export const setAccount = 'setAccount'
